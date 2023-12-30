@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virtual Food Ordering System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #orderBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #foodImage {
+            display: none;
+            margin-top: 20px;
+        }
+
+        #orderDetails {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <input type="checkbox" id="pizza" name="pizza" value="pizza"> 
+        pizza   
+    </div>
+    <div>
+        <input type="checkbox" id="burger" name="burger" value="burger">
+        burger
+    </div>
+    <div>
+        <input type="checkbox" name="noodle" id="noodle" value="noodle">
+        noodle
+    </div>
+    <div>
+        <input type="checkbox" name="coffee" id="coffee" value="coffee">
+        coffee
+    </div>
+    <button id="orderBtn" onclick="placeOrder()">Order Food</button>
+    <div id="foodImage"></div>
+    <div id="orderDetails"></div>
+
+    <script>
+        const foodItems = {
+            pizza: "https://www.engelvoelkers.com/wp-content/uploads/2014/07/pizza-stock.jpg",
+            burger: "https://th.bing.com/th/id/OIP.fSirpT6kvWVZadG8Q20s7QHaE_?rs=1&pid=ImgDetMain",
+            noodle: "https://www.engelvoelkers.com/wp-content/uploads/2014/07/pizza-stock.jpg",
+            coffee: "https://th.bing.com/th/id/OIP.fSirpT6kvWVZadG8Q20s7QHaE_?rs=1&pid=ImgDetMain"
+        };
+
+        function placeOrder() {
+            const orderDetails = document.getElementById('orderDetails');
+            const selectedFood = getSelectedFood();
+
+            if (selectedFood) {
+                const orderPromise = new Promise(resolve => {
+                    setTimeout(() => {
+                        resolve();
+                    }, 1000); 
+                }).then(() => {
+                    return "Order placed";
+                });
+
+                orderPromise.then((res) => {
+                    console.log(res);
+
+                    
+                    const foodImage = document.getElementById('foodImage');
+                    foodImage.innerHTML = `<img src="${foodItems[selectedFood]}" alt="${selectedFood} ">`;
+                    foodImage.style.display = 'block';
+
+                    // Display order details with a unique order ID
+                    const orderId = generateOrderId();
+                    orderDetails.textContent = `Order ID: ${orderId}`;
+                });
+            } else {
+                alert("Please select a food item before placing an order.");
+            }
+        }
+
+        function getSelectedFood() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            if (checkboxes.length > 0) {
+                return checkboxes[0].value; // Assuming only one food item can be selected
+            }
+            return null;
+        }
+
+        function generateOrderId() {
+            // Simple unique order ID generation (for demo purposes)
+            return 'ORD' + Math.floor(Math.random() * 10000);
+        }
+    </script>
+</body>
+</html>
